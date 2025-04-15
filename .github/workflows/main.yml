@@ -1,0 +1,27 @@
+name: Авто-коммиты3
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * *'  # Запуск каждый день в 12:00 UTC
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Даем разрешение на запись
+    steps:
+      - name: Клонирование репозитория
+        uses: actions/checkout@v2
+
+      - name: Настройка Git
+        run: |
+          git config --global user.email "tomassigfu952@gmail.com"
+          git config --global user.name "tomassigfu952"
+
+      - name: Добавление изменений
+        run: |
+          echo "$(date)" >> activity.log
+          git add .
+          git commit -m "Авто-коммит: $(date)" || echo "Нет изменений"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/tomassigfu952/tom.git
